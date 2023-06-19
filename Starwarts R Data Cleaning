@@ -1,0 +1,114 @@
+> library(tidyverse)
+> view(starwars)
+> glimpse(starwars)
+Rows: 87
+Columns: 14
+$ name       <chr> "Luke Skywalker", "C-3PO", "R2-D2", "Darth Vader", "Leia Organa", "Owen Lars", "Beru Whitesun lars", "R5-D4", "Biggs…
+$ height     <int> 172, 167, 96, 202, 150, 178, 165, 97, 183, 182, 188, 180, 228, 180, 173, 175, 170, 180, 66, 170, 183, 200, 190, 177,…
+$ mass       <dbl> 77.0, 75.0, 32.0, 136.0, 49.0, 120.0, 75.0, 32.0, 84.0, 77.0, 84.0, NA, 112.0, 80.0, 74.0, 1358.0, 77.0, 110.0, 17.0…
+$ hair_color <chr> "blond", NA, NA, "none", "brown", "brown, grey", "brown", NA, "black", "auburn, white", "blond", "auburn, grey", "br…
+$ skin_color <chr> "fair", "gold", "white, blue", "white", "light", "light", "light", "white, red", "light", "fair", "fair", "fair", "u…
+$ eye_color  <chr> "blue", "yellow", "red", "yellow", "brown", "blue", "blue", "red", "brown", "blue-gray", "blue", "blue", "blue", "br…
+$ birth_year <dbl> 19.0, 112.0, 33.0, 41.9, 19.0, 52.0, 47.0, NA, 24.0, 57.0, 41.9, 64.0, 200.0, 29.0, 44.0, 600.0, 21.0, NA, 896.0, 82…
+$ sex        <chr> "male", "none", "none", "male", "female", "male", "female", "none", "male", "male", "male", "male", "male", "male", …
+$ gender     <fct> masculine, masculine, masculine, masculine, feminine, masculine, feminine, masculine, masculine, masculine, masculin…
+$ homeworld  <chr> "Tatooine", "Tatooine", "Naboo", "Tatooine", "Alderaan", "Tatooine", "Tatooine", "Tatooine", "Tatooine", "Stewjon", …
+$ species    <chr> "Human", "Droid", "Droid", "Human", "Human", "Human", "Human", "Droid", "Human", "Human", "Human", "Human", "Wookiee…
+$ films      <list> <"The Empire Strikes Back", "Revenge of the Sith", "Return of the Jedi", "A New Hope", "The Force Awakens">, <"The …
+$ vehicles   <list> <"Snowspeeder", "Imperial Speeder Bike">, <>, <>, <>, "Imperial Speeder Bike", <>, <>, <>, <>, "Tribubble bongo", <…
+$ starships  <list> <"X-wing", "Imperial shuttle">, <>, <>, "TIE Advanced x1", <>, <>, <>, <>, "X-wing", <"Jedi starfighter", "Trade Fe…
+> class(starwars$gender)
+[1] "factor"
+> unique(starwars$gender)
+[1] masculine feminine  <NA>     
+Levels: masculine feminine
+> starwars$gender <- factor((starwars$gender), levels = c("masculine", "feminine"))
+> levels(starwars$gender)
+[1] "masculine" "feminine" 
+> mean(starwars$height, na.rm =TRUE)
+[1] 174.358
+> starwars %>% 
++     select(name, gender, hair_color, height)
+# A tibble: 87 × 4
+   name               gender    hair_color    height
+   <chr>              <fct>     <chr>          <int>
+ 1 Luke Skywalker     masculine blond            172
+ 2 C-3PO              masculine NA               167
+ 3 R2-D2              masculine NA                96
+ 4 Darth Vader        masculine none             202
+ 5 Leia Organa        feminine  brown            150
+ 6 Owen Lars          masculine brown, grey      178
+ 7 Beru Whitesun lars feminine  brown            165
+ 8 R5-D4              masculine NA                97
+ 9 Biggs Darklighter  masculine black            183
+10 Obi-Wan Kenobi     masculine auburn, white    182
+# ℹ 77 more rows
+# ℹ Use `print(n = ...)` to see more rows
+> starwars %>% 
++     select(name, gender, hair_color, height) %>% 
++     drop_na()
+# A tibble: 73 × 4
+   name               gender    hair_color    height
+   <chr>              <fct>     <chr>          <int>
+ 1 Luke Skywalker     masculine blond            172
+ 2 Darth Vader        masculine none             202
+ 3 Leia Organa        feminine  brown            150
+ 4 Owen Lars          masculine brown, grey      178
+ 5 Beru Whitesun lars feminine  brown            165
+ 6 Biggs Darklighter  masculine black            183
+ 7 Obi-Wan Kenobi     masculine auburn, white    182
+ 8 Anakin Skywalker   masculine blond            188
+ 9 Wilhuff Tarkin     masculine auburn, grey     180
+10 Chewbacca          masculine brown            228
+# ℹ 63 more rows
+# ℹ Use `print(n = ...)` to see more rows
+> starwars %>% 
++     select(name, gender, hair_color,height) %>% 
++     filter(complete.cases(.)) 
+# A tibble: 73 × 4
+   name               gender    hair_color    height
+   <chr>              <fct>     <chr>          <int>
+ 1 Luke Skywalker     masculine blond            172
+ 2 Darth Vader        masculine none             202
+ 3 Leia Organa        feminine  brown            150
+ 4 Owen Lars          masculine brown, grey      178
+ 5 Beru Whitesun lars feminine  brown            165
+ 6 Biggs Darklighter  masculine black            183
+ 7 Obi-Wan Kenobi     masculine auburn, white    182
+ 8 Anakin Skywalker   masculine blond            188
+ 9 Wilhuff Tarkin     masculine auburn, grey     180
+10 Chewbacca          masculine brown            228
+# ℹ 63 more rows
+# ℹ Use `print(n = ...)` to see more rows
+> starwars %>% 
++     select(name, gender, hair_color, height) %>% 
++     filter(!complete.cases(.))
+# A tibble: 14 × 4
+   name                  gender    hair_color height
+   <chr>                 <fct>     <chr>       <int>
+ 1 C-3PO                 masculine NA            167
+ 2 R2-D2                 masculine NA             96
+ 3 R5-D4                 masculine NA             97
+ 4 Greedo                masculine NA            173
+ 5 Jabba Desilijic Tiure masculine NA            175
+ 6 Arvel Crynyd          masculine brown          NA
+ 7 Ric Olié              NA        brown         183
+ 8 Quarsh Panaka         NA        black         183
+ 9 Sly Moore             NA        none          178
+10 Finn                  masculine black          NA
+11 Rey                   feminine  brown          NA
+12 Poe Dameron           masculine brown          NA
+13 BB8                   masculine none           NA
+14 Captain Phasma        NA        unknown        NA
+> starwars %>% 
++     select(name, gender, hair_color, height) %>% 
++     drop_na(height) %>% 
++     view()
+> starwars %>% 
++     select(name, gender, hair_color, height) %>% 
++     filter(!complete.cases(.)) %>% 
++     mutate(hair_color2 = replace_na(hair_color, "none")) %>% 
++     view()
+> starwars %>% 
++     select(name, gender) %>% 
++     mutate(gender = recode (gender, "masculine" =1, "feminine" = 2)) %>% 
